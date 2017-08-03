@@ -107,13 +107,6 @@ $str = str_replace("%name%", $name, $str);
 $str = str_replace("%filters%", getFilters(), $str);
 $str = str_replace("%filters_sql%", getFiltersSql(), $str);
 
-/*
-$visible_filter = '';
-
-		if(isset($filter['visible']))
-			$visible_filter = $this->db->placehold('AND a.visible=?', intval($filter['visible']));
-*/
-
 echo "<textarea>";
 echo $str;
 echo "</textarea>";

@@ -152,6 +152,7 @@ if (isset($_POST['form_add'])) {
 			<a class="button autoWid unlink" href="itemAdmin.php" target="_blank">Сгенерировать админский файл</a>
 			<a class="button autoWid unlink" href="itemTemplate.php" target="_blank">Сгенерировать шаблон</a>
 			<a class="button autoWid unlink" href="api.php" target="_blank">API</a>
+			<a class="button autoWid unlink" href="itemsAdmin.php" target="_blank">Сгенерировать админский файл - items</a>
 		</div>
 	</body>
 </html>
