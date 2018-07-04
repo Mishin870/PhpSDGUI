@@ -19,6 +19,7 @@ $ncase = $data["ncase"];
 $gcase = $data["gcase"];
 mysqli_free_result($query);
 
+//Localization
 $strings = array(
 	"new"	=> array('новый', 'новая'),
 	"add"	=> array('добавлен', 'добавлена'),
@@ -43,6 +44,7 @@ textarea {
 }
 </style>";
 
+//The string template for itemTemplate with placeholders
 $str = "{capture name=tabs}
 	{include file=\"madmintabs.tpl\" manager=\$manager currTab='%tab%'}
 {/capture}
@@ -108,21 +110,21 @@ $(function() {
 	<input class=\"button_green button_save\" type=\"submit\" name=\"\" value=\"Сохранить\"/>
 </form>";
 
-function et($str) {
+function ecraniseBraces($str) {
 	$str = str_replace("<", "&lt", $str);
 	$str = str_replace(">", "&gt", $str);
 	return $str;
 }
-function us($n) {
+
+/**
+ * @return mixed localized string in Russian by its key
+ */
+function localizedString($key) {
 	global $strings, $rod;
-	$text = $strings[$n][$rod];
-	return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
+	return $strings[$key][$rod];
 }
-function s($n) {
-	global $strings, $rod;
-	return $strings[$n][$rod];
-}
-function u($text) {
+
+function firstCharacterUpper($text) {
 	return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
 }
 
@@ -132,14 +134,14 @@ function getUpArea() {
 	$ret = '';
 	while ($row = mysqli_fetch_assoc($query)) {
 		$type = intval($row["type"]);
-		$n = $row["name"];
-		$d = $row["description"];
+		$name = $row["name"];
+		$description = $row["description"];
 		if ($type == 0) {
-			$ret .= "\t\t<div class=\"checkbox\">\n\t\t\t<input name={$n} value='1' type=\"checkbox\" id=\"{$n}_checkbox\"{if \${$name}->{$n}}checked{/if}/> <label for=\"{$n}_checkbox\">{$d}</label>\n\t\t</div>";
+			$ret .= "\t\t<div class=\"checkbox\">\n\t\t\t<input name={$name} value='1' type=\"checkbox\" id=\"{$name}_checkbox\"{if \${$name}->{$name}}checked{/if}/> <label for=\"{$name}_checkbox\">{$description}</label>\n\t\t</div>";
 		}
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
 
 function getDownArea() {
@@ -148,14 +150,14 @@ function getDownArea() {
 	$ret = '';
 	while ($row = mysqli_fetch_assoc($query)) {
 		$type = intval($row["type"]);
-		$n = $row["name"];
-		$d = $row["description"];
+		$name = $row["name"];
+		$description = $row["description"];
 		if ($type == 5) {
-			$ret .= "\t\t<h2>Описание</h2><textarea name=\"{$d}\" class=\"editor_large\">{\${$name}->{$n}|escape}</textarea>\n";
+			$ret .= "\t\t<h2>Описание</h2><textarea name=\"{$description}\" class=\"editor_large\">{\${$name}->{$name}|escape}</textarea>\n";
 		}
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
 
 function getLeftArea() {
@@ -164,41 +166,41 @@ function getLeftArea() {
 	$ret = '';
 	while ($row = mysqli_fetch_assoc($query)) {
 		$type = intval($row["type"]);
-		$n = $row["name"];
-		$d = $row["description"];
-		/*if ($type == 0) {
-			$ret .= "\t\t<div class=\"checkbox\">\n\t\t\t<input name={$n} value='1' type=\"checkbox\" id=\"{$n}_checkbox\"{if \${$name}->{$n}}checked{/if}/> <label for=\"{$n}_checkbox\">{$d}</label>\n\t\t</div>";
-		}*/
+		$name = $row["name"];
+		$description = $row["description"];
+//		if ($type == 0) {
+//			$ret .= "\t\t<div class=\"checkbox\">\n\t\t\t<input name={$n} value='1' type=\"checkbox\" id=\"{$n}_checkbox\"{if \${$name}->{$n}}checked{/if}/> <label for=\"{$n}_checkbox\">{$d}</label>\n\t\t</div>";
+//		}
 		if ($type == 3) {
-			$ret .= "\t\t\t\t<li><label class=property>{$d}</label><input name=\"{$n}\" class=\"simpla_inp\" type=\"text\" value=\"{\${$name}->{$n}}\" /></li>\n";
+			$ret .= "\t\t\t\t<li><label class=property>{$description}</label><input name=\"{$name}\" class=\"simpla_inp\" type=\"text\" value=\"{\${$name}->{$name}}\" /></li>\n";
 		} else if ($type == 4) {
 			$ret .= "\t\t\t\t<li>
-					<label class=\"property\">{$d}</label>
-					<select name=\"{$n}\">
-						{\${$n}s = []}
+					<label class=\"property\">{$description}</label>
+					<select name=\"{$name}\">
+						{\${$name}s = []}
 						{\$i = 0}
-						{foreach \${$n}s as \${$n}}
-							<option value=\"{\$i}\" {if \$i==\${$name}->{$n}}selected=\"selected\"{/if}>{\${$n}}</option>
+						{foreach \${$name}s as \${$name}}
+							<option value=\"{\$i}\" {if \$i==\${$name}->{$name}}selected=\"selected\"{/if}>{\${$name}}</option>
 							{\$i = \$i + 1}
 						{/foreach}
 					</select>
 				</li>\n";
 		} else if ($type == 2) {
-			$ret .= "\t\t\t\t<li><label class=\"property\">{$d}</label><textarea name=\"{$n}\" class=\"simpla_inp\">{\${$name}->{$n}|escape}</textarea></li>\n";
+			$ret .= "\t\t\t\t<li><label class=\"property\">{$description}</label><textarea name=\"{$name}\" class=\"simpla_inp\">{\${$name}->{$name}|escape}</textarea></li>\n";
 		} else if ($type == 1) {
-			$ret .= "\t\t\t\t<li><label class=\"property\">{$d}</label><input name=\"{$n}\" class=\"simpla_inp\" type=\"text\" value=\"{\${$name}->{$n}|escape}\"/></li>\n";
+			$ret .= "\t\t\t\t<li><label class=\"property\">{$description}</label><input name=\"{$name}\" class=\"simpla_inp\" type=\"text\" value=\"{\${$name}->{$name}|escape}\"/></li>\n";
 		}
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
 
-$str = et($str);
+$str = ecraniseBraces($str);
 $str = str_replace("%name%", $name, $str);
 $str = str_replace("%tab%", $name."s", $str);
-$str = str_replace("%new%", us("new")." ".$ncase, $str);
-$str = str_replace("%added%", u($ncase)." ".s("add"), $str);
-$str = str_replace("%updated%", u($ncase)." ".s("upd"), $str);
+$str = str_replace("%new%", firstCharacterUpper(localizedString("new"))." ".$ncase, $str);
+$str = str_replace("%added%", firstCharacterUpper($ncase)." ".localizedString("add"), $str);
+$str = str_replace("%updated%", firstCharacterUpper($ncase)." ".localizedString("upd"), $str);
 $str = str_replace("%params%", "Параметры ".$gcase, $str);
 $str = str_replace("%up_area%", getUpArea(), $str);
 $str = str_replace("%left_area%", getLeftArea(), $str);
