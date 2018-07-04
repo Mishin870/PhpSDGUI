@@ -9,16 +9,16 @@ The utility for generating new pages of the admin panel in `Simpla CMS`
 * Any browser
 
 #### Setup
-`Clone this repo to the web server (git clone https://github.com/Mishin870/PhpSDGUI.git)`
-`Create new database`
-`Import sdgui_backup.sql into your database`
-`Change database name, host, user and password in db.php`
+`Clone this repo to the web server (git clone https://github.com/Mishin870/PhpSDGUI.git)`<br>
+`Create new database`<br>
+`Import sdgui_backup.sql into your database`<br>
+`Change database name, host, user and password in db.php`<br>
 `Open index.php in your web browser`
 
 #### Paths for generated filed
-api => /api/%Name%.php
-itemAdmin => /simpla/%name%Admin.php
-itemsAdmin => /simpla/%name%sAdmin.php
+api => /api/%Name%.php<br>
+itemAdmin => /simpla/%name%Admin.php<br>
+itemsAdmin => /simpla/%name%sAdmin.php<br>
 itemTemplate => /simpla/design/html/%name%.tpl
 
 #### Tasks
