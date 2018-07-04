@@ -29,6 +29,7 @@ textarea {
 }
 </style>";
 
+//The string template for itemsAdmin with placeholders
 $str = "<?php
 require_once('api/Simpla.php');
 
@@ -56,6 +57,7 @@ class %class% extends Simpla {
 	}
 }";
 
+//Inserting variables into a template
 $str = str_replace("<", "&lt", $str);
 $str = str_replace(">", "&gt", $str);
 $str = str_replace("%class%", ucfirst($name)."sAdmin", $str);

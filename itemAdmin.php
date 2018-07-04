@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Админский файл</title>
+	<title>Админский файл - item</title>
 </head>
 <body>
 <?php
@@ -29,6 +29,7 @@ textarea {
 }
 </style>";
 
+//The string template for itemAdmin with placeholders
 $str = "<?php
 require_once('api/Simpla.php');
 
@@ -59,11 +60,19 @@ class %class% extends Simpla {
 	}
 }";
 
-function et($str) {
+function ecraniseBraces($str) {
 	$str = str_replace("<", "&lt", $str);
 	$str = str_replace(">", "&gt", $str);
 	return $str;
 }
+
+/**
+ * Makes commands to process all POST variables in fetch()
+ *
+ * @param $bd Link to database
+ * @param $name Admin page name
+ * @return mixed
+ */
 function get_posts($bd, $name) {
 	$query = mysqli_query($bd, "SELECT name, type FROM vars");
 	$ret = '';
@@ -78,9 +87,10 @@ function get_posts($bd, $name) {
 		$ret .= "\t\t\t$".$name."->".$row["name"]." = \$this->request->post('".$row["name"]."'".$typeStr.");".PHP_EOL;
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
 
+//Inserting variables into a template
 $str = str_replace("<", "&lt", $str);
 $str = str_replace(">", "&gt", $str);
 $str = str_replace("%class%", ucfirst($name)."Admin", $str);

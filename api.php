@@ -29,6 +29,7 @@ textarea {
 }
 </style>";
 
+//The string template for api with placeholders
 $str = "<?php
 require_once('Simpla.php');
 
@@ -72,11 +73,15 @@ class %class% extends Simpla {
 	
 }";
 
-function et($str) {
+function ecraniseBraces($str) {
 	$str = str_replace("<", "&lt", $str);
 	$str = str_replace(">", "&gt", $str);
 	return $str;
 }
+
+/**
+ * Makes filter declarations for function get_%name%s of template
+ */
 function getFilters() {
 	global $bd, $name;
 	$query = mysqli_query($bd, "SELECT name FROM vars WHERE type='0'");
@@ -86,8 +91,11 @@ function getFilters() {
 		$ret .= "\t\t\${$n}_filter = '';\n\t\tif (isset(\$filter['{$n}'])) \${$n}_filter = \$this->db->placehold('AND x.{$n}=?', intval(\$filter['{$n}']));\n";
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
+/**
+ * Makes sql for filters in function get_%name%s of template
+ */
 function getFiltersSql() {
 	global $bd, $name;
 	$query = mysqli_query($bd, "SELECT name FROM vars WHERE type='0'");
@@ -97,9 +105,10 @@ function getFiltersSql() {
 		$ret .= " \${$n}_filter";
 	}
 	mysqli_free_result($query);
-	return et($ret);
+	return ecraniseBraces($ret);
 }
 
+//Inserting variables into a template
 $str = str_replace("<", "&lt", $str);
 $str = str_replace(">", "&gt", $str);
 $str = str_replace("%class%", ucfirst($name)."s", $str);
