@@ -16,10 +16,10 @@ The utility for generating new pages of the admin panel in `Simpla CMS`
 * Open index.php in your web browser
 
 #### Paths for generated files
-api => /api/%Name%.php<br>
-itemAdmin => /simpla/%name%Admin.php<br>
-itemsAdmin => /simpla/%name%sAdmin.php<br>
-itemTemplate => /simpla/design/html/%name%.tpl
+* api => /api/%Name%.php<br>
+* itemAdmin => /simpla/%name%Admin.php<br>
+* itemsAdmin => /simpla/%name%sAdmin.php<br>
+* itemTemplate => /simpla/design/html/%name%.tpl
 
 #### Tasks
 - [x] Generator core
